@@ -206,6 +206,78 @@
       .hero p { font-size: 1rem; }
     }
 
+/* ===== LOCATION OVERLAY ===== */
+.location-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #fff;
+  z-index: 2000;
+  overflow-y: auto;
+}
+.location-overlay.open { display: block; }
+.location-overlay-inner {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 30px 60px;
+}
+.location-overlay-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  font-family: 'Rozha One', sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #333;
+  margin-bottom: 30px;
+  padding: 0;
+}
+.location-overlay-back:hover { color: #1e40af; }
+.location-overlay h2 {
+  font-size: 2.8rem;
+  margin-bottom: 20px;
+  text-align: left;
+}
+.location-overlay-photo {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  border-radius: 14px;
+  display: block;
+  background: #e5e7eb;
+  margin-bottom: 28px;
+}
+.location-overlay-photo-placeholder {
+  width: 100%;
+  height: 420px;
+  border-radius: 14px;
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  font-size: 1rem;
+  margin-bottom: 28px;
+}
+.location-address {
+  font-size: 1.2rem;
+  color: #555;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.location-address svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+@media (max-width: 768px) {
+  .location-overlay-inner { padding: 24px 20px 50px; }
+  .location-overlay h2 { font-size: 2rem; }
+  .location-overlay-photo,
+  .location-overlay-photo-placeholder { height: 240px; }
+}
   </style>
 </head>
 <body>
@@ -445,10 +517,70 @@
   </form>
 </section>
 
+<!-- ===== LOCATION OVERLAY ===== -->
+<div class="location-overlay" id="locationOverlay">
+  <div class="location-overlay-inner">
+    <button class="location-overlay-back" id="locationBackBtn">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back
+    </button>
+    <h2 id="overlayTitle"></h2>
+    <div id="overlayPhoto" class="location-overlay-photo-placeholder">Photo coming soon</div>
+    <div class="location-address">
+      <svg width="20" height="20" fill="none" stroke="#1e40af" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21s-6-5.686-6-10a6 6 0 1 1 12 0c0 4.314-6 10-6 10z"/><circle cx="12" cy="11" r="2"/></svg>
+      <span id="overlayAddress"></span>
+    </div>
+  </div>
+</div>
+
 <footer>© 2025 Colors Delight</footer>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+// ===== LOCATION OVERLAY =====
+const locationData = {
+  "Leidsche Rijn": {
+    address: "Your address here, Leidsche Rijn, Utrecht",
+    photo: ""   // set to image filename e.g. "leidsche-rijn.jpg"
+  },
+  "Vleuten": {
+    address: "Your address here, Vleuten, Utrecht",
+    photo: ""
+  },
+  "Montfoort": {
+    address: "Your address here, Montfoort, Utrecht",
+    photo: ""
+  }
+};
+
+const overlay = document.getElementById("locationOverlay");
+const overlayTitle = document.getElementById("overlayTitle");
+const overlayAddress = document.getElementById("overlayAddress");
+const overlayPhoto = document.getElementById("overlayPhoto");
+
+document.querySelectorAll(".location-pill").forEach(pill => {
+  pill.style.cursor = "pointer";
+  pill.addEventListener("click", () => {
+    const name = pill.textContent.trim();
+    const data = locationData[name];
+    overlayTitle.textContent = name;
+    overlayAddress.textContent = data.address;
+    if (data.photo) {
+      overlayPhoto.outerHTML = `<img src="${data.photo}" alt="${name}" class="location-overlay-photo" id="overlayPhoto">`;
+    } else {
+      overlayPhoto.className = "location-overlay-photo-placeholder";
+      overlayPhoto.textContent = "Photo coming soon";
+    }
+    overlay.classList.add("open");
+    document.body.style.overflow = "hidden";
+    overlay.scrollTop = 0;
+  });
+});
+
+document.getElementById("locationBackBtn").addEventListener("click", () => {
+  overlay.classList.remove("open");
+  document.body.style.overflow = "";
+});
 emailjs.init("m_mCmsy1CP-IdBHQB");
 
   const hamburgerBtn = document.getElementById("hamburgerBtn");
