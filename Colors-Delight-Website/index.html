@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Colors Delight </title>
+
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rozha+One&display=swap" rel="stylesheet">
+
+  <style>
+    html { scroll-behavior: smooth; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Rozha One', sans-serif; }
+    body { scroll-behavior: smooth; color: #333; }
+
+    header {
+      position: fixed; top: 0; width: 100%; height: 70px;
+      background: linear-gradient(90deg, hsla(0,0%,96%,1) 50%, hsla(13,56%,86%,1) 100%, hsla(192,100%,92%,1) 100%);
+      display: flex; justify-content: space-between; align-items: center;
+      z-index: 1000; padding: 0 30px;
+    }
+    .nav-left, .nav-right { display: flex; align-items: center; gap: 20px; flex: 1; }
+    .nav-right { justify-content: flex-end; }
+    nav a { color: #333; text-decoration: none; font-weight: bold; font-size: 0.95rem; white-space: nowrap; }
+    .header-logo-slot { flex: 0 0 auto; display: flex; justify-content: center; align-items: center; width: 80px; }
+    .header-logo-img { height: 55px; width: auto; background: white; padding: 4px 8px; border-radius: 8px; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+
+    section { min-height: 100vh; padding: 120px 40px 60px; }
+
+    .hero {
+      min-height: 70vh;
+      background: linear-gradient(90deg, hsla(0,0%,96%,1) 50%, hsla(13,56%,86%,1) 100%, hsla(192,100%,92%,1) 100%);
+      color: #333; text-align: center; display: flex; flex-direction: column;
+      justify-content: center; align-items: center; position: relative;
+    }
+    .hero p { font-size: 1.5rem; max-width: 700px; margin: 0 auto; }
+    .hero-logo-wrapper { position: relative; margin-bottom: 30px; }
+    .hero-logo { max-width: 55vw; width: 100%; background: white; padding: 20px; border-radius: 16px; display: block; transform-origin: top center; }
+
+    .light { background: #f9fafb; }
+    .dark { background: white; }
+    h2 { font-size: 2.6rem; margin-bottom: 35px; text-align: center; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; max-width: 1100px; margin: auto; }
+    .card { background: #eef2ff; padding: 25px; border-radius: 12px; text-align: center; }
+    .signup { background: linear-gradient(90deg, hsla(0,0%,96%,1) 50%, hsla(13,56%,86%,1) 100%, hsla(192,100%,92%,1) 100%); }
+
+    form { max-width: 600px; margin: auto; display: flex; flex-direction: column; gap: 14px; }
+    .choice-group { display: flex; flex-direction: column; gap: 14px; }
+    .choice { display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; }
+    .choice input { appearance: none; width: 24px; height: 24px; border-radius: 50%; border: 2px solid rgb(68,67,67); cursor: pointer; }
+    .choice input:checked { background: #1e40af; border-color: #1e40af; }
+
+    .lesson-section { display: none; flex-direction: column; gap: 12px; }
+    .lesson-section.active { display: flex; }
+
+    .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
+    .day, .day2 { background: rgba(255,255,255,0.85); color: #111827; text-align: center; padding: 12px 0; border-radius: 8px; cursor: pointer; font-weight: 600; }
+    .day.selected, .day2.selected { background: #1e40af; color: white; }
+
+    input, select, button { padding: 12px; border-radius: 6px; border: none; font-size: 1rem; }
+    button { background: #111827; color: white; cursor: pointer; font-weight: bold; }
+
+    footer { text-align: center; padding: 20px; background: #111827; color: white; }
+    .success { text-align: center; font-weight: bold; color: rgb(0, 0, 0); margin-top: 10px; }
+
+    /* === ADD CHILD BUTTON === */
+    .add-child-btn {
+      background: transparent; color: #1e40af; border: 2px solid #1e40af;
+      cursor: pointer; font-weight: bold; font-size: 0.95rem; padding: 10px 18px;
+      border-radius: 8px; display: flex; align-items: center; gap: 8px;
+      width: fit-content; transition: background 0.2s ease, color 0.2s ease;
+      font-family: 'Rozha One', sans-serif;
+    }
+    .add-child-btn:hover { background: #1e40af; color: white; }
+
+    #secondChildSection {
+      display: none; flex-direction: column; gap: 12px;
+      border-top: 2px dashed #1e40af; padding-top: 14px; margin-top: 4px;
+    }
+    #secondChildSection.active { display: flex; }
+
+    .second-child-label { font-size: 1rem; font-weight: bold; color: #1e40af; letter-spacing: 0.3px; }
+
+    #secondParentContact { display: none; flex-direction: column; gap: 12px; }
+    #secondParentContact.active { display: flex; }
+
+    .second-parent-divider { font-size: 0.95rem; font-weight: bold; color: #555; border-top: 1px solid #ccc; padding-top: 10px; }
+
+    /* === SERVICES === */
+    .services-section { background: #f5f5f5; }
+    .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1200px; margin: auto; }
+    .service-card { position: relative; height: 600px; overflow: hidden; border-radius: 14px; text-decoration: none; cursor: pointer; }
+    .service-card img { width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform 0.4s ease; }
+    .service-card:hover img { transform: scale(1.08); }
+    .service-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: bold; text-align: center; padding: 20px; }
+    @media (max-width: 900px) { .services-grid { grid-template-columns: 1fr; } .service-card { height: 260px; } }
+
+    #about .grid { align-items: center; }
+    #about .card { text-align: center; }
+    #about .card p { font-size: 1.5rem; line-height: 1.8; max-width: 500px; margin: 0 auto; }
+    #about .card img { display: block; margin: 0 auto; max-width: 100%; }
+
+    .locations-banner {
+      min-height: 60vh;
+      background: linear-gradient(90deg, hsla(0,0%,96%,1) 50%, hsla(13,56%,86%,1) 100%, hsla(192,100%,92%,1) 100%);
+      color: rgb(0,0,0); display: flex; flex-direction: column; justify-content: center;
+      align-items: center; text-align: center; padding: 100px 40px;
+    }
+    .locations-banner h2 { font-size: 3rem; margin-bottom: 40px; }
+    .locations-row { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; margin-bottom: 25px; }
+    .location-pill { background: rgba(255,255,255,0.15); backdrop-filter: blur(6px); padding: 18px 36px; border-radius: 999px; font-size: 1.5rem; font-weight: bold; letter-spacing: 0.5px; transition: transform 0.3s ease, background 0.3s ease; }
+    .location-pill:hover { transform: translateY(-5px); background: rgba(255,255,255,0.25); }
+    .locations-subtext { font-size: 1.2rem; opacity: 0.9; }
+
+    .merch-section { background: #ffffff; }
+    .merch-grid { max-width: 1100px; margin: auto; }
+    .merch-card { background: #f3f4f6; border-radius: 14px; padding: 20px; text-align: center; transition: transform 0.3s ease; }
+    .merch-card h3 { font-size: 1.5rem; margin-bottom: 15px; }
+    .merch-image { overflow: hidden; border-radius: 12px; }
+    .merch-image img { width: 100%; height: 500px; object-fit: cover; transition: transform 0.4s ease; }
+    .merch-card:hover .merch-image img { transform: scale(1.08); }
+    .merch-card:hover { transform: translateY(-6px); }
+
+    #about h2, #contact h2 { text-align: center; max-width: 1100px; margin-left: auto; margin-right: auto; padding-left: 10px; }
+    section { scroll-margin-top: 120px; }
+    select, textarea { padding: 12px; border-radius: 6px; font-size: 1rem; border: none; }
+
+/* ===== HAMBURGER ===== */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  padding: 6px;
+  background: none;
+  border: none;
+  z-index: 1100;
+}
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #333;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ===== MOBILE NAV DRAWER ===== */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  top: 70px; left: 0; right: 0;
+  background: linear-gradient(180deg, hsla(0,0%,96%,1) 0%, hsla(13,56%,86%,1) 100%);
+  flex-direction: column;
+  padding: 20px 30px 30px;
+  gap: 18px;
+  z-index: 999;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+.mobile-nav.open { display: flex; }
+.mobile-nav a {
+  color: #333; text-decoration: none; font-weight: bold;
+  font-size: 1.1rem; padding: 8px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+.mobile-nav a:last-child { border-bottom: none; }
+
+@media (max-width: 768px) {
+      .nav-left, .nav-right { display: none; }
+      .hamburger { display: flex; }
+      header { padding: 0 16px; }
+      .hero p { font-size: 1.1rem; padding: 0 16px; }
+      .hero-logo { max-width: 80vw; padding: 12px; }
+      section { padding: 90px 20px 50px; }
+      h2 { font-size: 1.9rem; margin-bottom: 24px; }
+      .services-grid { grid-template-columns: 1fr; gap: 16px; }
+      .service-card { height: 220px; border-radius: 12px; }
+      .service-overlay { font-size: 1.4rem; }
+      #about .card p { font-size: 1.1rem; line-height: 1.7; }
+      .locations-banner { padding: 80px 20px; min-height: auto; }
+      .locations-banner h2 { font-size: 2rem; margin-bottom: 24px; }
+      .locations-row { gap: 12px; }
+      .location-pill { font-size: 1rem; padding: 12px 22px; }
+      .locations-subtext { font-size: 1rem; }
+      .merch-image img { height: 200px; }
+      .merch-card h3 { font-size: 1.2rem; }
+      .week-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+      input, select, button, textarea { font-size: 16px; padding: 13px 12px; width: 100%; }
+      .add-child-btn { width: 100%; justify-content: center; }
+      .signup { padding: 90px 20px 50px; }
+      footer { font-size: 0.9rem; }
+    }
+
+    @media (max-width: 380px) {
+      .week-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+      .day, .day2 { font-size: 0.75rem; padding: 9px 0; }
+      h2 { font-size: 1.6rem; }
+      .hero p { font-size: 1rem; }
+    }
+
+  </style>
+</head>
+<body>
+
+<header>
+  <nav class="nav-left">
+    <a href="#home">Home</a>
+    <a href="#services">Services</a>
+    <a href="#about">About Me</a>
+  </nav>
+  <div class="header-logo-slot">
+    <img src="logo.jpg" alt="Colors Delight Logo" class="header-logo-img" id="headerLogoImg">
+  </div>
+  <nav class="nav-right">
+    <a href="#Where-We-Teach">Where We Teach</a>
+    <a href="#merch">Merchandise</a>
+    <a href="#contact">Contact</a>
+</nav>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<nav class="mobile-nav" id="mobileNav">
+  <a href="#home">Home</a>
+  <a href="#services">Services</a>
+  <a href="#about">About Me</a>
+  <a href="#Where-We-Teach">Where We Teach</a>
+  <a href="#merch">Merchandise</a>
+  <a href="#contact">Contact</a>
+</nav>
+
+<section id="home" class="hero">
+  <div class="hero-logo-wrapper">
+    <img src="logo.jpg" alt="Colors Delight Logo" class="hero-logo" id="heroLogo">
+  </div>
+  <p>Vibrant art lessons, joyful events, and handmade creations designed to inspire creativity at every age</p>
+</section>
+
+<section id="services" class="services-section">
+  <h2>Our Services</h2>
+  <div class="services-grid">
+    <a href="#" class="service-card">
+      <img src="Weekly Art Lessons.jpeg" alt="Weekly Art Lessons">
+      <div class="service-overlay">Weekly Art Lessons</div>
+    </a>
+    <a href="#" class="service-card">
+      <img src="Art Camp.jpeg" alt="Holiday Camps">
+      <div class="service-overlay">Holiday Camps</div>
+    </a>
+    <a href="#" class="service-card">
+      <img src="Group Events.jpeg" alt="Group Events">
+      <div class="service-overlay">Group Events</div>
+    </a>
+  </div>
+</section>
+
+<section id="about" class="light">
+  <h2>About Me</h2>
+  <div class="grid">
+    <div class="card">
+      <p>I am a visual artist skilled in various media, such as watercolor, acrylic, oil pastels, and graphite. I also work as an art teacher (self-employed) and freelancer, creating commissioned and finished artwork.</p>
+    </div>
+    <div class="card">
+      <img src="Chirpy.jpeg" alt="Artist painting" style="width:100%; border-radius:10px;">
+    </div>
+  </div>
+</section>
+
+<section id="Where-We-Teach" class="locations-banner">
+  <h2>Where We Teach</h2>
+  <div class="locations-row">
+    <div class="location-pill">Leidsche Rijn</div>
+    <div class="location-pill">Vleuten</div>
+    <div class="location-pill">Montfoort</div>
+  </div>
+  <p class="locations-subtext">Inspiring creativity across Utrecht and surrounding areas</p>
+</section>
+
+<section id="merch" class="dark merch-section">
+  <h2>Merchandise</h2>
+  <div class="grid merch-grid">
+    <div class="merch-card">
+      <h3>Handmade Paintings</h3>
+      <div class="merch-image"><img src="paintings.jpg" alt="Handmade Paintings"></div>
+    </div>
+    <div class="merch-card">
+      <h3>Seasonal Greeting Cards</h3>
+      <div class="merch-image"><img src="greeting cards.jpg" alt="Seasonal Greeting Cards"></div>
+    </div>
+    <div class="merch-card">
+      <h3>Customized Handicrafts</h3>
+      <div class="merch-image"><img src="handicrafts.jpg" alt="Customized Handicrafts"></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="signup">
+  <h2>Contact &amp; Lesson Enquiry</h2>
+  <form id="contact-form">
+
+    <div class="choice-group">
+      <label class="choice"><input type="checkbox" id="childrenToggle"> Children's Lessons</label>
+      <label class="choice"><input type="checkbox" id="adultToggle"> Adult Lessons</label>
+      <label class="choice"><input type="checkbox" id="holidayToggle"> Holiday Camps</label>
+      <label class="choice"><input type="checkbox" id="groupToggle"> Group Events</label>
+      <label class="choice"><input type="checkbox" id="otherToggle"> Other</label>
+    </div>
+    <div id="serviceError" class="success" style="display:none;">Please select at least one lesson type.</div>
+
+    <!-- ===== CHILDREN'S SECTION ===== -->
+    <div id="childrenSection" class="lesson-section">
+<h3>Children's Lessons</h3>
+
+      <!-- First child -->
+      <input type="text" id="parent_name" name="parent_name" placeholder="Name of Parent">
+      <input type="text" name="child_name" placeholder="Name of Child">
+      <input type="number" name="child_age" placeholder="Age of Child">
+      <div class="week-grid">
+        <div class="day" data-day="Mon">Mon</div>
+        <div class="day" data-day="Tue">Tue</div>
+        <div class="day" data-day="Wed">Wed</div>
+        <div class="day" data-day="Thu">Thu</div>
+        <div class="day" data-day="Fri">Fri</div>
+        <div class="day" data-day="Sat">Sat</div>
+        <div class="day" data-day="Sun">Sun</div>
+      </div>
+      <div id="daySummary">No days selected</div>
+
+      <!-- Add Child button -->
+      <button type="button" class="add-child-btn" id="addChildBtn">＋ Add Child</button>
+
+      <!-- Second child (hidden by default) -->
+      <div id="secondChildSection">
+        <p class="second-child-label">Second Child's Details</p>
+        <input type="text" id="parent_name_2" name="parent_name_2" placeholder="Name of Second Child's Parent">
+        <input type="text" name="child_name_2" placeholder="Name of Second Child">
+        <input type="number" name="child_age_2" placeholder="Age of Second Child">
+        <div class="week-grid">
+          <div class="day2" data-day="Mon">Mon</div>
+          <div class="day2" data-day="Tue">Tue</div>
+          <div class="day2" data-day="Wed">Wed</div>
+          <div class="day2" data-day="Thu">Thu</div>
+          <div class="day2" data-day="Fri">Fri</div>
+          <div class="day2" data-day="Sat">Sat</div>
+          <div class="day2" data-day="Sun">Sun</div>
+        </div>
+        <div id="daySummary2">No days selected</div>
+      </div>
+
+    </div>
+
+    <!-- ===== ADULT SECTION ===== -->
+    <div id="adultSection" class="lesson-section">
+      <h3>Adult Lessons</h3>
+
+      <input type="text" name="Name" placeholder="Name">
+      <select name="Level of Experience" id="experienceSelect">
+        <option>Level of Experience (Select an Option)</option>
+        <option>Beginner</option>
+        <option>Have some Experience</option>
+      </select>
+    </div>
+
+    <!-- ===== HOLIDAY SECTION ===== -->
+    <div id="holidaySection" class="lesson-section">
+      <h3>Holiday Camp</h3>
+
+      <input type="number" name="holiday_students" placeholder="Number of Students">
+      <select name="holiday_age_min">
+        <option value="">Youngest One's Age (Select an Age)</option>
+        <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18+</option>
+      </select>
+      <select name="holiday_age_max">
+        <option value="">Oldest One's Age (Select an Age)</option>
+        <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18+</option>
+      </select>
+    </div>
+
+    <!-- ===== GROUP SECTION ===== -->
+    <div id="groupSection" class="lesson-section">
+      <h3>Group Event</h3>
+
+      <input type="number" name="group_students" placeholder="Number of Students">
+      <select name="group_age_min">
+        <option value="">Youngest One's Age (Select an Age)</option>
+        <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18+</option>
+      </select>
+      <select name="group_age_max">
+        <option value="">Oldest One's Age (Select an Age)</option>
+        <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18+</option>
+      </select>
+      <select name="group_location">
+        <option value="">Select Location</option>
+        <option>Leidsche Rijn</option><option>Vleuten</option><option>Montfoort</option>
+      </select>
+    </div>
+
+    <!-- ===== OTHER SECTION ===== -->
+    <div id="otherSection" class="lesson-section">
+      <h3>Other</h3>
+
+      <input type="number" name="other_students" placeholder="Number of Students">
+      <select name="other_age_min">
+        <option value="">Youngest One's Age (Select an Age)</option>
+        <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18+</option>
+      </select>
+      <select name="other_age_max">
+        <option value="">Oldest One's Age (Select an Age)</option>
+        <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18+</option>
+      </select>
+      <select name="other_location">
+        <option value="">Select Location</option>
+        <option>Leidsche Rijn</option><option>Vleuten</option><option>Montfoort</option>
+      </select>
+      <textarea name="other_description" placeholder="Please describe your request"></textarea>
+    </div>
+
+    <input type="hidden" id="preferred_days" name="preferred_days">
+    <input type="hidden" id="preferred_days_2" name="preferred_days_2">
+
+    <!-- ===== CONTACT ===== -->
+    <h3>Contact</h3>
+    <input type="tel" id="phone" name="phone" placeholder="Phone Number">
+    <input type="email" id="email" name="email" placeholder="Email Address">
+
+    <!-- Shown only when second child has a different parent -->
+    <div id="secondParentContact">
+      <p class="second-parent-divider">Second Child's Parent Contact</p>
+      <input type="tel" name="phone_2" placeholder="Phone Number (Second Child's Parent)">
+      <input type="email" name="email_2" placeholder="Email Address (Second Child's Parent)">
+    </div>
+
+    <button type="submit">Submit</button>
+    <div id="status" class="success"></div>
+    <input type="hidden" name="selected_services" id="selected_services">
+  </form>
+</section>
+
+<footer>© 2025 Colors Delight</footer>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+emailjs.init("m_mCmsy1CP-IdBHQB");
+
+  const hamburgerBtn = document.getElementById("hamburgerBtn");
+  const mobileNav = document.getElementById("mobileNav");
+  hamburgerBtn.addEventListener("click", () => {
+    hamburgerBtn.classList.toggle("open");
+    mobileNav.classList.toggle("open");
+  });
+  mobileNav.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      hamburgerBtn.classList.remove("open");
+      mobileNav.classList.remove("open");
+    });
+  });
+  // ===== LOGO SCROLL ANIMATION =====
+  const heroLogo = document.getElementById("heroLogo");
+  const headerLogoImg = document.getElementById("headerLogoImg");
+  const header = document.querySelector("header");
+
+  function animateLogo() {
+    const heroRect = heroLogo.getBoundingClientRect();
+    const headerHeight = header.offsetHeight;
+    const heroLogoCenterY = heroRect.top + heroRect.height / 2;
+    const targetY = headerHeight / 2;
+    const heroLogoCenterX = heroRect.left + heroRect.width / 2;
+    const targetX = window.innerWidth / 2;
+    const scrollStart = 50;
+    const scrollEnd = heroRect.height + 100;
+    const scrollY = window.scrollY;
+    let progress = (scrollY - scrollStart) / (scrollEnd - scrollStart);
+    progress = Math.max(0, Math.min(1, progress));
+    const eased = progress < 0.5
+      ? 4 * progress * progress * progress
+      : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+    const heroScale = 1 - eased * 0.55;
+    const heroOpacity = 1 - eased;
+    const translateX = (targetX - heroLogoCenterX) * eased;
+    const translateY = (targetY - heroLogoCenterY) * eased;
+    heroLogo.style.transform = `translate(${translateX}px, ${translateY}px) scale(${heroScale})`;
+    heroLogo.style.opacity = heroOpacity;
+    headerLogoImg.style.opacity = eased;
+    headerLogoImg.style.pointerEvents = eased > 0.5 ? "auto" : "none";
+  }
+
+  window.addEventListener("scroll", animateLogo, { passive: true });
+  animateLogo();
+
+  // ===== SECTION TOGGLES =====
+  const childrenToggle = document.getElementById("childrenToggle");
+  const adultToggle    = document.getElementById("adultToggle");
+  const holidayToggle  = document.getElementById("holidayToggle");
+  const groupToggle    = document.getElementById("groupToggle");
+  const otherToggle    = document.getElementById("otherToggle");
+
+  const childrenSection = document.getElementById("childrenSection");
+  const adultSection    = document.getElementById("adultSection");
+  const holidaySection  = document.getElementById("holidaySection");
+  const groupSection    = document.getElementById("groupSection");
+  const otherSection    = document.getElementById("otherSection");
+
+  function updateSections() {
+    childrenSection.classList.toggle("active", childrenToggle.checked);
+    adultSection.classList.toggle("active",    adultToggle.checked);
+    holidaySection.classList.toggle("active",  holidayToggle.checked);
+    groupSection.classList.toggle("active",    groupToggle.checked);
+    otherSection.classList.toggle("active",    otherToggle.checked);
+  }
+
+  [childrenToggle, adultToggle, holidayToggle, groupToggle, otherToggle].forEach(t => {
+    t.addEventListener("change", updateSections);
+    t.addEventListener("change", () => {
+      document.getElementById("serviceError").style.display = "none";
+    });
+  });
+
+  // ===== FIRST CHILD DAY PICKER =====
+  const days    = document.querySelectorAll(".day");
+  const summary = document.getElementById("daySummary");
+  const hidden  = document.getElementById("preferred_days");
+  days.forEach(day => {
+    day.addEventListener("click", () => {
+      day.classList.toggle("selected");
+      const sel = [...days].filter(d => d.classList.contains("selected")).map(d => d.dataset.day);
+      hidden.value   = sel.join(", ");
+      summary.textContent = sel.length ? "Selected: " + sel.join(", ") : "No days selected";
+    });
+  });
+
+  // ===== SECOND CHILD DAY PICKER =====
+  const days2    = document.querySelectorAll(".day2");
+  const summary2 = document.getElementById("daySummary2");
+  const hidden2  = document.getElementById("preferred_days_2");
+  days2.forEach(day => {
+    day.addEventListener("click", () => {
+      day.classList.toggle("selected");
+      const sel = [...days2].filter(d => d.classList.contains("selected")).map(d => d.dataset.day);
+      hidden2.value   = sel.join(", ");
+      summary2.textContent = sel.length ? "Selected: " + sel.join(", ") : "No days selected";
+    });
+  });
+
+  // ===== ADD CHILD TOGGLE =====
+  const addChildBtn       = document.getElementById("addChildBtn");
+  const secondChildSection = document.getElementById("secondChildSection");
+  const parentName2Field  = document.getElementById("parent_name_2");
+  const secondParentContact = document.getElementById("secondParentContact");
+  let secondChildVisible  = false;
+
+  addChildBtn.addEventListener("click", () => {
+    secondChildVisible = !secondChildVisible;
+    secondChildSection.classList.toggle("active", secondChildVisible);
+    addChildBtn.textContent = secondChildVisible ? "✕ Remove Second Child" : "+ Add Child";
+
+    if (!secondChildVisible) {
+      // Reset second child when removed
+      parentName2Field.value = "";
+      secondParentContact.classList.remove("active");
+      days2.forEach(d => d.classList.remove("selected"));
+      hidden2.value = "";
+      summary2.textContent = "No days selected";
+    }
+  });
+
+  // ===== SECOND PARENT CONTACT LOGIC =====
+  const parentName1Field = document.getElementById("parent_name");
+
+  function checkParentNames() {
+    const n1 = parentName1Field.value.trim().toLowerCase();
+    const n2 = parentName2Field.value.trim().toLowerCase();
+    // Show second parent contact only if: second child is visible, name 2 is filled, and names differ
+    const shouldShow = secondChildVisible && n2.length > 0 && n1 !== n2;
+    secondParentContact.classList.toggle("active", shouldShow);
+  }
+
+  parentName1Field.addEventListener("input", checkParentNames);
+  parentName2Field.addEventListener("input", checkParentNames);
+
+  // ===== FORM SUBMIT =====
+  document.getElementById("contact-form").addEventListener("submit", e => {
+    e.preventDefault();
+    const status = document.getElementById("status");
+    status.textContent = "";
+    const serviceError = document.getElementById("serviceError");
+
+    const anyService = childrenToggle.checked || adultToggle.checked || holidayToggle.checked || groupToggle.checked || otherToggle.checked;
+    if (!anyService) {
+      serviceError.style.display = "block";
+      serviceError.textContent = "Please select at least one lesson type.";
+      serviceError.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    serviceError.style.display = "none";
+
+    const phoneVal    = document.getElementById("phone").value.trim();
+    const emailVal    = document.getElementById("email").value.trim();
+    const experience  = document.getElementById("experienceSelect").value;
+
+    if (!phoneVal && !emailVal) {
+      status.textContent = "Please provide either a phone number or email.";
+      return;
+    }
+
+    if (adultToggle.checked && experience === "Level of Experience (Select an Option)") {
+      status.textContent = "Please select a Level of Experience.";
+      status.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+
+    const selectedServices = [];
+    if (childrenToggle.checked) selectedServices.push("Children's Lessons");
+    if (adultToggle.checked)    selectedServices.push("Adult Lessons");
+    if (holidayToggle.checked)  selectedServices.push("Holiday Camps");
+    if (groupToggle.checked)    selectedServices.push("Group Events");
+    if (otherToggle.checked)    selectedServices.push("Other");
+    document.getElementById("selected_services").value = selectedServices.join(", ");
+
+   const formEl = e.target;
+const getValue = name => formEl.querySelector(`[name="${name}"]`)?.value?.trim() || "";
+
+const templateParams = {
+  phone: phoneVal,
+  email: emailVal,
+  selected_services: selectedServices.join(", "),
+  children_block: "",
+  adult_block: "",
+  holiday_block: "",
+  group_block: "",
+  other_block: "",
+};
+if (childrenToggle.checked) {
+  let cb = `<strong>Parent Name:</strong> ${getValue("parent_name")}<br><strong>Child Name:</strong> ${getValue("child_name")}<br><strong>Child Age:</strong> ${getValue("child_age")}<br><strong>Preferred Days:</strong> ${document.getElementById("preferred_days").value || "None selected"}`;
+  if (secondChildVisible) {
+    cb += `<br><br><strong>Second Child</strong><br><strong>Parent Name:</strong> ${getValue("parent_name_2")}<br><strong>Child Name:</strong> ${getValue("child_name_2")}<br><strong>Child Age:</strong> ${getValue("child_age_2")}<br><strong>Preferred Days:</strong> ${document.getElementById("preferred_days_2").value || "None selected"}`;
+  }
+  templateParams.children_block = cb;
+}
+
+if (adultToggle.checked) {
+  const adultName = formEl.querySelector('[name="Name"]')?.value?.trim() || "";
+  const adultLevel = formEl.querySelector('[name="Level of Experience"]')?.value?.trim() || "";
+  templateParams.adult_block = `<strong>Name:</strong> ${adultName}<br><strong>Experience Level:</strong> ${adultLevel}`;
+}
+
+if (holidayToggle.checked) {
+  templateParams.holiday_block = `<strong>Number of Students:</strong> ${getValue("holiday_students")}<br><strong>Age Range:</strong> ${getValue("holiday_age_min")} – ${getValue("holiday_age_max")}`;
+}
+
+if (groupToggle.checked) {
+  templateParams.group_block = `<strong>Number of Students:</strong> ${getValue("group_students")}<br><strong>Age Range:</strong> ${getValue("group_age_min")} – ${getValue("group_age_max")}<br><strong>Location:</strong> ${getValue("group_location")}`;
+}
+
+if (otherToggle.checked) {
+  templateParams.other_block = `<strong>Number of Students:</strong> ${getValue("other_students")}<br><strong>Age Range:</strong> ${getValue("other_age_min")} – ${getValue("other_age_max")}<br><strong>Location:</strong> ${getValue("other_location")}<br><strong>Description:</strong> ${getValue("other_description")}`;
+}
+
+emailjs.send("service_o965bw3", "template_q7w1j96", templateParams)
+  .then(() => status.textContent = "Enquiry sent successfully!")
+  .catch(() => status.textContent = "Failed to send message.");
+  });
+});
+</script>
+</body>
+</html>
