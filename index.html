@@ -6,6 +6,7 @@
   <title>Colors Delight </title>
 
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -917,14 +918,61 @@ document.getElementById("holidayCampsTrigger").addEventListener("click", e => {
 });
 document.getElementById("holidayCampBackBtn").addEventListener("click", () => history.back());
 
-// Product data left empty on purpose — no products listed yet.
-// When ready, add items like:
-// paintings: [{ name: "...", desc: "...", price: "€..", img: "..." }]
-const webshopProducts = {
+// Products are now loaded automatically from your Google Sheet.
+let webshopProducts = {
   paintings: [],
   cards: [],
   handicrafts: []
 };
+let productsLoaded = false;
+
+// PASTE the link you copied in Step 2 between the quotes below:
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQcoTT7RzbvpVYtMOEX_mPgpr5H2S7NQQojxpcL0TGmmfwxl4egJruwClNhBjIsUeLPcn9Qe0-YCgs6/pub?output=csv";
+
+function loadProductsFromSheet(callback) {
+  const url = SHEET_CSV_URL;
+  
+  console.log("Fetching products from:", url);   // Debug
+
+  Papa.parse(url, {
+    download: true,
+    header: true,
+    skipEmptyLines: true,
+    complete: function (results) {
+      console.log("PapaParse completed. Rows found:", results.data.length);
+      console.log("First row sample:", results.data[0]);
+
+      const grouped = { paintings: [], cards: [], handicrafts: [] };
+
+      results.data.forEach(row => {
+        const category = String(row.category || "").trim().toLowerCase();
+        if (category && grouped[category]) {
+          grouped[category].push({
+            name: row.name || "Unnamed",
+            desc: row.description || "",
+            price: row.price || "",
+            img: row.image || ""
+          });
+        }
+      });
+
+      console.log("Loaded products:", {
+        paintings: grouped.paintings.length,
+        cards: grouped.cards.length,
+        handicrafts: grouped.handicrafts.length
+      });
+
+      webshopProducts = grouped;
+      productsLoaded = true;
+      if (callback) callback();
+    },
+    error: function(err) {
+      console.error("PapaParse Error:", err);
+      document.getElementById("webshopProducts").innerHTML = 
+        `<div class="webshop-empty">Error loading products. Check console (F12).</div>`;
+    }
+  });
+}
 
 function renderWebshopCategory(category) {
   const container = document.getElementById("webshopProducts");
@@ -953,8 +1001,15 @@ function renderWebshopCategory(category) {
 }
 
 function openWebshop(category) {
-  renderWebshopCategory(category);
   openOverlay(document.getElementById("webshopOverlay"), "webshop");
+
+  if (!productsLoaded) {
+    document.getElementById("webshopProducts").innerHTML =
+      `<div class="webshop-empty">Loading products…</div>`;
+    loadProductsFromSheet(() => renderWebshopCategory(category));
+  } else {
+    renderWebshopCategory(category);
+  }
 }
 
 document.getElementById("webshopBtn").addEventListener("click", () => openWebshop("paintings"));
@@ -1264,6 +1319,34 @@ emailjs.send("service_o965bw3", "template_q7w1j96", templateParams)
   .catch(() => status.textContent = "Failed to send message.");
   });
 });
+
+</div>
+
+  </form>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      Papa.parse("products.csv", {   
+          download: true,
+          header: true,
+          skipEmptyLines: true,
+          complete: function(results) {
+              console.log("Products loaded:", results.data);
+              // Make sure your renderProducts function is defined elsewhere in your scripts!
+              if (typeof renderProducts === "function") {
+                  renderProducts(results.data);   
+              }
+          },
+          error: function(err) {
+              console.error("Failed to load CSV", err);
+          }
+      });
+  });
+</script>
+
+</body>
+</html>
 </script>
 </body>
 </html>
