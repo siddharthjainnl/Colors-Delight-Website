@@ -945,8 +945,8 @@ function loadProductsFromSheet(callback) {
       const grouped = { paintings: [], cards: [], handicrafts: [] };
 
       results.data.forEach(row => {
-        const category = String(row.category || "").trim().toLowerCase();
-        if (category && grouped[category]) {
+const firstKey = Object.keys(row)[0];
+const category = String(row[firstKey] || "").trim().toLowerCase();        if (category && grouped[category]) {
           grouped[category].push({
             name: row.name || "Unnamed",
             desc: row.description || "",
