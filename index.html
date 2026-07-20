@@ -13,6 +13,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Rozha+One&display=swap" rel="stylesheet">
 
   <style>
+    .camp-section-label {
+  font-size: 0.78rem; text-transform: uppercase;
+  letter-spacing: 1.2px; color: #6b7280; margin-bottom: 10px;
+}
+.camp-art-tags {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px;
+}
+.camp-tag {
+  background: #eef2ff; color: #1e40af; border-radius: 999px;
+  padding: 6px 14px; font-size: 0.95rem; font-family: 'Rozha One', sans-serif;
+}
+.camp-detail-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 1rem; color: #374151; margin-bottom: 10px;
+}
     .merch-card { cursor: pointer; }
 
 .page-overlay {
@@ -542,16 +557,22 @@
         <div class="camp-cal-month">AUG</div>
         <div class="camp-cal-days">24–27</div>
       </div>
-      <div class="camp-details">
-        <ul class="camp-bullets">
-          <li>Timing: 10:30 – 13:00</li>
-          <li>All materials are provided</li>
-          <li>Location: Leidsche Rijn area — exact venue to be confirmed closer to the date</li>
-        </ul>
-        <div class="camp-footer-row">
-          <div class="camp-price">€139.99</div>
-          <button type="button" class="webshop-btn" id="registerCampBtn">Register Now</button>
-        </div>
+     <div class="camp-details">
+  <p class="camp-section-label">What you'll create</p>
+  <div class="camp-art-tags">
+    <span class="camp-tag">Texture painting</span>
+    <span class="camp-tag">3D-Acrylic on canvas</span>
+    <span class="camp-tag">Cardboard art &amp; craft</span>
+    <span class="camp-tag">Watercolour / Oil pastel</span>
+  </div>
+  <div class="camp-detail-item">🕙 <span>10:30 – 13:00</span></div>
+  <div class="camp-detail-item">📍 <span>Buurtcentrum Hoge Weide, 3541RB Utrecht</span></div>
+  <div class="camp-detail-item">✅ <span>All materials provided</span></div>
+  <div class="camp-footer-row">
+    <div class="camp-price">€139.99</div>
+    <button type="button" class="webshop-btn" id="registerCampBtn">Register Now</button>
+  </div>
+</div>
       </div>
     </div>
   </div>
