@@ -13,21 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Rozha+One&display=swap" rel="stylesheet">
 
   <style>
-    .camp-section-label {
-  font-size: 0.78rem; text-transform: uppercase;
-  letter-spacing: 1.2px; color: #6b7280; margin-bottom: 10px;
-}
-.camp-art-tags {
-  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px;
-}
-.camp-tag {
-  background: #eef2ff; color: #1e40af; border-radius: 999px;
-  padding: 6px 14px; font-size: 0.95rem; font-family: 'Rozha One', sans-serif;
-}
-.camp-detail-item {
-  display: flex; align-items: flex-start; gap: 10px;
-  font-size: 1rem; color: #374151; margin-bottom: 10px;
-}
+ 
     .merch-card { cursor: pointer; }
 
 .page-overlay {
@@ -364,65 +350,59 @@
   .location-overlay-photo-placeholder { height: 240px; }
 }
 
-/* ===== HOLIDAY CAMP OVERLAY - MINIMAL CALENDAR ===== */
-.camp-detail-row {
-  display: flex; gap: 40px; align-items: flex-start;
-  max-width: 1000px; margin: 20px auto 0;
+/* ===== HOLIDAY CAMP OVERLAY - REDESIGNED ===== */
+.camp-top {
+  display: flex; align-items: center; gap: 26px;
+  margin-bottom: 38px; flex-wrap: wrap;
 }
-
-.camp-calendar-icon {
-  flex: 0 0 38%;
-  width: 100%;
-  max-width: 200px;
-  aspect-ratio: 5 / 3.5;           /* Much shorter height */
-  background: #fff;
-  border: 3px solid #1e40af;
-  border-radius: 12px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+.camp-cal {
+  flex: 0 0 220px; border: 3px solid #1e40af; border-radius: 12px;
+  overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.09);
 }
-
 .camp-cal-month {
-  background: #1e40af;
-  color: white;
-  text-align: center;
-  padding: 10px 8px 6px;
-  font-size: clamp(0.95rem, 2.8vw, 1.2rem);
-  font-weight: bold;
-  letter-spacing: 1.5px;
+  background: #1e40af; color: white; text-align: center;
+  padding: 10px 6px 7px; font-size: 1.6rem; letter-spacing: 1.5px;
 }
-
 .camp-cal-days {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: clamp(2.2rem, 6.5vw, 3.4rem);
-  font-weight: bold;
-  color: #111827;
-  line-height: 1;
-  padding: 6px;
+  text-align: center; font-size: 3.0rem; font-weight: bold;
+  color: #111827; padding: 14px 6px;
 }
-
-.camp-details { flex: 1; }
-.camp-bullets { list-style: disc; padding-left: 22px; display: flex; flex-direction: column; gap: 14px; font-size: 1.1rem; }
-.camp-footer-row { display: flex; justify-content: space-between; align-items: center; margin-top: 34px; }
-.camp-price { font-size: 1.6rem; font-weight: bold; color: #111827; }
-
+.camp-details {
+  flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 180px;
+}
+.camp-detail-item {
+  display: flex; align-items: flex-start; gap: 9px;
+  font-size: 1.2rem; color: #374151;
+}
+.camp-register {
+  flex: 0 0 auto; display: flex; flex-direction: column;
+  align-items: flex-end; gap: 12px;
+}
+.camp-price { font-size: 2rem; font-weight: bold; color: #111827; }
+.camp-section-divider { border: none; border-top: 1.5px solid #e5e7eb; margin-bottom: 28px; }
+.camp-section-label {
+  font-size: 0.8rem; text-transform: uppercase;
+  letter-spacing: 1.4px; color: #6b7280; margin-bottom: 20px;
+}
+.art-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.art-card {
+  position: relative; border-radius: 14px; overflow: hidden;
+  aspect-ratio: 3/4; box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+}
+.art-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.art-card-overlay {
+  position: absolute; inset: 0; background: rgba(0,0,0,0.38);
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px; text-align: center;
+}
+.art-card-title {
+  color: white; font-size: 1.15rem; line-height: 1.3;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+}
 @media (max-width: 768px) {
-  .camp-detail-row { 
-    flex-direction: column; 
-  }
-  .camp-calendar-icon { 
-    flex: 0 0 auto; 
-    width: 50%; 
-    max-width: 150px;
-    margin: 0 auto; 
-  }
-  .camp-footer-row { flex-direction: column; gap: 16px; align-items: stretch; margin-top: 24px; }
-  .camp-footer-row .webshop-btn { width: 100%; }
+  .camp-top { flex-direction: column; align-items: flex-start; }
+  .camp-register { align-items: flex-start; }
+  .art-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* ===== "OTHER" LOCATION TEXT INPUT ===== */
@@ -552,30 +532,45 @@
     </button>
     <h2>Holiday Camps</h2>
 
-    <div class="camp-detail-row">
-      <div class="camp-calendar-icon">
-        <div class="camp-cal-month">AUG</div>
+    <div class="camp-top">
+      <div class="camp-cal">
+        <div class="camp-cal-month">AUGUST</div>
         <div class="camp-cal-days">24–27</div>
       </div>
-     <div class="camp-details">
-  <p class="camp-section-label">What you'll create</p>
-  <div class="camp-art-tags">
-    <span class="camp-tag">Texture painting</span>
-    <span class="camp-tag">3D-Acrylic on canvas</span>
-    <span class="camp-tag">Cardboard art &amp; craft</span>
-    <span class="camp-tag">Watercolour / Oil pastel</span>
-  </div>
-  <div class="camp-detail-item">👶 <span>Age: 5+</span></div>
-  <div class="camp-detail-item">🕙 <span>10:30 – 13:00</span></div>
-  <div class="camp-detail-item">📍 <span>Buurtcentrum Hoge Weide, 3541RB Utrecht</span></div>
-  <div class="camp-detail-item">🎨 <span>All materials provided</span></div>
-  <div class="camp-footer-row">
-    <div class="camp-price">€140</div>
-    <button type="button" class="webshop-btn" id="registerCampBtn">Register Now</button>
-  </div>
-</div>
+      <div class="camp-details">
+        <div class="camp-detail-item">👶 <span><strong>Age:</strong> 5+</span></div>
+        <div class="camp-detail-item">🕙 <span><strong>Time:</strong> 10:30 – 13:00</span></div>
+        <div class="camp-detail-item">📍 <span>Buurtcentrum Hoge Weide, 3541RB Utrecht</span></div>
+        <div class="camp-detail-item">🎨 <span>All materials provided</span></div>
+      </div>
+      <div class="camp-register">
+        <div class="camp-price">€140</div>
+        <button type="button" class="webshop-btn" id="registerCampBtn">Register Now</button>
       </div>
     </div>
+
+    <hr class="camp-section-divider">
+    <p class="camp-section-label">What you'll create</p>
+
+    <div class="art-grid">
+      <div class="art-card">
+        <img src="Texture_Painting.jpeg" alt="Texture Painting">
+        <div class="art-card-overlay"><div class="art-card-title">Texture Painting</div></div>
+      </div>
+      <div class="art-card">
+        <img src="3D_Acrylic_on_Canvas.jpeg" alt="3D-Acrylic on Canvas">
+        <div class="art-card-overlay"><div class="art-card-title">3D-Acrylic on Canvas</div></div>
+      </div>
+      <div class="art-card">
+        <img src="Cardboard_Art_Craft.jpeg" alt="Cardboard Art and Craft">
+        <div class="art-card-overlay"><div class="art-card-title">Cardboard Art &amp; Craft</div></div>
+      </div>
+      <div class="art-card">
+        <img src="Watercolor_Oil_Pastel.jpeg" alt="Watercolour / Oil Pastel">
+        <div class="art-card-overlay"><div class="art-card-title">Watercolour / Oil Pastel</div></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -702,7 +697,7 @@
       <h3>Holiday Camp</h3>
 
       <select name="holiday_camp_session" id="holidayCampSession">
-        <option>Holiday Camp AUG 24 - 27 </option>
+        <option>Holiday Camp AUGUST 24 - 27 </option>
       </select>
       <input type="number" name="holiday_students" id="holidayStudentsInput" placeholder="Number of Students">
 
