@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rozha+One&display=swap" rel="stylesheet">
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     
     html { scroll-behavior: smooth; }
@@ -163,6 +163,29 @@
     }
     .spinner.active { display: block; }
     @keyframes spin { to { transform: rotate(360deg); } }
+        /* === POP-UP PAGES === */
+    .page-view { display: none; position: fixed; inset: 0; z-index: 1050; background: #f9fafb; overflow-y: auto; padding: 100px 40px 60px; }
+    .page-view.open { display: block; }
+    .page-inner { max-width: 1000px; margin: auto; }
+    .page-inner h3 { margin-bottom: 10px; }
+    .page-inner p { line-height: 1.7; }
+    .back-btn { background: transparent; color: #1e40af; border: 2px solid #1e40af; margin-bottom: 25px; }
+    .back-btn:hover { background: #1e40af; color: white; }
+    .page-actions { text-align: center; margin-top: 35px; }
+    .lesson-loc { font-size: 1.3rem; color: #1e40af; margin-bottom: 8px; }
+    .lesson-time { font-weight: bold; font-size: 1.2rem; margin: 12px 0; }
+    .map-link { color: #1e40af; font-weight: bold; text-decoration: underline; }
+
+    /* === MERCH CONTACT TEXT === */
+    .merch-contact { text-align: center; max-width: 700px; margin: 40px auto 0; font-size: 1.3rem; line-height: 1.7; }
+    .merch-contact a { color: #1e40af; font-weight: bold; text-decoration: underline; }
+
+    /* === FOOTER SOCIALS === */
+    .social-row { display: flex; justify-content: center; gap: 16px; margin-bottom: 14px; }
+    .social-row a { color: white; font-size: 1.4rem; width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(255,255,255,0.12); text-decoration: none; transition: background 0.2s ease, transform 0.2s ease; }
+    .social-row a:hover { background: #1e40af; transform: translateY(-3px); }
+    .footer-email { margin-bottom: 12px; }
+    .footer-email a { color: white; }
   </style>
     </head>
 <body>
@@ -193,15 +216,15 @@
 <section id="services" class="services-section">
   <h2>Our Services</h2>
   <div class="services-grid">
-    <a href="#" class="service-card">
+    <a href="#" class="service-card" data-page="page-lessons">
       <img src="Weekly Art Lessons.jpeg" alt="Weekly Art Lessons">
       <div class="service-overlay">Weekly Art Lessons</div>
     </a>
-    <a href="#" class="service-card">
+    <a href="#" class="service-card" data-page="page-camps">
       <img src="Art Camp.jpeg" alt="Holiday Camps">
       <div class="service-overlay">Holiday Camps</div>
     </a>
-    <a href="#" class="service-card">
+    <a href="#contact" class="service-card" data-group>
       <img src="Group Events.jpeg" alt="Group Events">
       <div class="service-overlay">Group Events</div>
     </a>
@@ -246,6 +269,7 @@
       <div class="merch-image"><img src="handicrafts.jpg" alt="Customized Handicrafts"></div>
     </div>
   </div>
+  <p class="merch-contact">Interested in a painting, greeting card or custom handicraft? Please <a href="#footer">contact us directly</a>, and we'll be happy to help.</p>
 </section>
 
 <section id="contact" class="signup">
@@ -255,8 +279,7 @@
     <div class="choice-group">
       <label class="choice"><input type="checkbox" id="childrenToggle"> Children's Lessons</label>
       <label class="choice"><input type="checkbox" id="adultToggle"> Adult Lessons</label>
-      <label class="choice"><input type="checkbox" id="holidayToggle"> Holiday Camps</label>
-      <label class="choice"><input type="checkbox" id="groupToggle"> Group Events</label>
+      <label class="choice" style="display:none"><input type="checkbox" id="holidayToggle"> Holiday Camps</label>      <label class="choice"><input type="checkbox" id="groupToggle"> Group Events</label>
       <label class="choice"><input type="checkbox" id="otherToggle"> Other</label>
     </div>
     <div id="serviceError" class="success" style="display:none;">Please select at least one lesson type.</div>
@@ -391,8 +414,69 @@
   </form>
 </section>
 
-<footer>© 2025 Colors Delight</footer>
+<footer id="footer">
+  <div class="social-row">
+    <a href="https://www.instagram.com/sonaljn1/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+    <a href="https://wa.me/31617617579" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+    <a href="https://www.facebook.com/p/Colors-Delight-Satisfy-your-Art-craving-100065457071229/" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+    <a href="mailto:colorsdelightstudio@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+  </div>
+  <p class="footer-email"><a href="mailto:colorsdelightstudio@gmail.com">colorsdelightstudio@gmail.com</a></p>
+  <p>© 2025 Colors Delight</p>
+</footer>
 
+<!-- ===== PAGE: WEEKLY ART LESSONS ===== -->
+<div class="page-view" id="page-lessons">
+  <div class="page-inner">
+    <button type="button" class="back-btn" data-close>← Back</button>
+    <h2>Weekly Art Lessons</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Monday</h3>
+        <p class="lesson-loc">Het Zand</p>
+        <p>Buurtcentrum Het Zand<br>Pauwoogvlinder 20<br>3544 DB Utrecht</p>
+        <p class="lesson-time">17:20 – 18:30</p>
+        <a class="map-link" href="https://share.google/FZgLkJu7UmnGYwa6j" target="_blank" rel="noopener">View on Google Maps</a>
+      </div>
+      <div class="card">
+        <h3>Tuesday</h3>
+        <p class="lesson-loc">Montfoort</p>
+        <p>Colors Delight<br>Hannie Schaftstraat<br>3417CR, Montfoort</p>
+        <p class="lesson-time">17:00 – 18:00</p>
+        <a class="map-link" href="https://share.google/NBTsWq5UKlsnylsMF" target="_blank" rel="noopener">View on Google Maps</a>
+      </div>
+      <div class="card">
+        <h3>Wednesday</h3>
+        <p class="lesson-loc">Vleuten</p>
+        <p>Buurtcentrum Weide Wereld<br>Teunisbloemlaan 50<br>3452 CB Vleuten</p>
+        <p class="lesson-time">16:30 – 17:30</p>
+        <a class="map-link" href="https://www.google.com/maps/place/Buurtcentrum+Weide+Wereld/@52.0962191,5.0020146,17z/data=!3m1!4b1!4m6!3m5!1s0x47c671d5826c96d7:0xf555aca442b1f489!8m2!3d52.0962191!4d5.0020146!16s%2Fg%2F11h4yczghr?entry=ttu&g_ep=EgoyMDI2MDkyOC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener">View on Google Maps</a>
+      </div>
+      <div class="card">
+        <h3>Friday</h3>
+        <p class="lesson-loc">Terwijde</p>
+        <p>Buurtcentrum Terwijde<br>Operettelaan 629<br>3543 BR Utrecht</p>
+        <p class="lesson-time">16:30 – 17:30</p>
+        <a class="map-link" href="https://share.google/ZxQNYQxSXRQGHusRZ" target="_blank" rel="noopener">View on Google Maps</a>
+      </div>
+    </div>
+    <div class="page-actions"><button type="button" data-goto="contact">Enquire</button></div>
+  </div>
+</div>
+
+<!-- ===== PAGE: HOLIDAY CAMPS ===== -->
+<div class="page-view" id="page-camps">
+  <div class="page-inner">
+    <button type="button" class="back-btn" data-close>← Back</button>
+    <h2>Holiday Camps</h2>
+    <div class="card">
+      <h3>Upcoming Holiday Camp</h3>
+      <p>Dates and location will be announced soon.</p>
+      <p>Interested? Get in touch and we'll keep you updated.</p>
+    </div>
+    <div class="page-actions"><button type="button" data-goto="footer">Get in Touch</button></div>
+  </div>
+</div>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   emailjs.init("m_mCmsy1CP-IdBHQB");
@@ -675,6 +759,17 @@ emailjs.send("service_o965bw3", "template_q7w1j96", templateParams)
     ["Please select a Level of Experience.", "Selecteer een ervaringsniveau."],
     ["Enquiry sent successfully!", "Aanvraag succesvol verzonden!"],
     ["Failed to send message.", "Verzenden mislukt."],
+        ["← Back", "← Terug"],
+    ["Monday", "Maandag"], ["Tuesday", "Dinsdag"], ["Wednesday", "Woensdag"], ["Friday", "Vrijdag"],
+    ["View on Google Maps", "Bekijk op Google Maps"],
+    ["Enquire", "Aanvragen"],
+    ["Upcoming Holiday Camp", "Eerstvolgend vakantiekamp"],
+    ["Dates and location will be announced soon.", "Data en locatie worden binnenkort bekendgemaakt."],
+    ["Interested? Get in touch and we'll keep you updated.", "Interesse? Neem contact met ons op, dan houden wij u op de hoogte."],
+    ["Get in Touch", "Neem contact op"],
+    ["Interested in a painting, greeting card or custom handicraft? Please", "Interesse in een schilderij, wenskaart of handwerk op maat? Neem"],
+    ["contact us directly", "rechtstreeks contact met ons op"],
+    [", and we'll be happy to help.", ", dan helpen wij u graag."],
     ["Mon", "Ma"], ["Tue", "Di"], ["Wed", "Wo"], ["Thu", "Do"],
     ["Fri", "Vr"], ["Sat", "Za"], ["Sun", "Zo"]
   ];
@@ -739,6 +834,55 @@ emailjs.send("service_o965bw3", "template_q7w1j96", templateParams)
   });
 
   applyLang();
+})();
+</script>
+<script>
+(function () {
+  var openPage = null;
+
+  function showPage(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.classList.add("open");
+    el.scrollTop = 0;
+    document.body.style.overflow = "hidden";
+    openPage = el;
+  }
+  function hidePage() {
+    if (openPage) { openPage.classList.remove("open"); openPage = null; }
+    document.body.style.overflow = "";
+  }
+
+  // Open pages (Weekly Art Lessons, Holiday Camps)
+  document.querySelectorAll("[data-page]").forEach(function (a) {
+    a.addEventListener("click", function (e) { e.preventDefault(); showPage(a.dataset.page); });
+  });
+
+  // Close buttons + Esc
+  document.querySelectorAll("[data-close]").forEach(function (b) { b.addEventListener("click", hidePage); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") hidePage(); });
+
+  // Buttons that close the page and scroll somewhere
+  document.querySelectorAll("[data-goto]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      hidePage();
+      document.getElementById(b.dataset.goto).scrollIntoView({ behavior: "smooth" });
+    });
+  });
+
+  // Group Events: scroll to the form, then tick "Group Events"
+  var groupCard = document.querySelector("[data-group]");
+  groupCard.addEventListener("click", function (e) {
+    e.preventDefault();
+    document.getElementById("contact").scrollIntoView({ behavior: "smooth" });
+    setTimeout(function () {
+      var t = document.getElementById("groupToggle");
+      if (!t.checked) {
+        t.checked = true;
+        t.dispatchEvent(new Event("change"));
+      }
+    }, 700);
+  });
 })();
 </script>
 </body></html>
