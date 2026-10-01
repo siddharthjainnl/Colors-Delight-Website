@@ -136,8 +136,22 @@
       .nav-left, .nav-right { gap: 10px; }
       nav a { font-size: 0.8rem; }
     }
+    /* === LANGUAGE BUTTON === */
+    .lang-btn {
+      position: fixed; top: 17px; right: 12px; z-index: 1100;
+      padding: 6px 14px; font-size: 0.85rem; border-radius: 6px;
+      background: #dbdee6; color: rgb(31, 26, 26); border: none; cursor: pointer;
+      font-weight: bold; white-space: nowrap;
+    }
+    header { padding-right: 80px; }
+    @media (max-width: 768px) {
+      header { padding-left: 10px; padding-right: 70px; }
+      nav a { font-size: 0.7rem; }
+      .nav-left, .nav-right { gap: 8px; }
+    }
+    .lang-btn:hover { background: #6477b3; }
   </style>
-</head>
+    </head>
 <body>
 
 <header>
@@ -152,8 +166,8 @@
   <nav class="nav-right">
     <a href="#Where-We-Teach">Where We Teach</a>
     <a href="#merch">Merchandise</a>
-    <a href="#contact">Contact</a>
-  </nav>
+<a href="#contact">Contact</a>
+    <button type="button" id="langBtn" class="lang-btn">NL</button>  </nav>
 </header>
 
 <section id="home" class="hero">
@@ -576,5 +590,126 @@ emailjs.send("service_o965bw3", "template_q7w1j96", templateParams)
   });
 });
 </script>
-</body>
-</html>
+<script>
+(function () {
+  var pairs = [
+    ["Home", "Home"],
+    ["Services", "Diensten"],
+    ["About Me", "Over mij"],
+    ["Where We Teach", "Waar wij lesgeven"],
+    ["Merchandise", "Producten"],
+    ["Contact", "Contact"],
+    ["Vibrant art lessons, joyful events, and handmade creations designed to inspire creativity at every age", "Kleurrijke kunstlessen, vrolijke evenementen en handgemaakte creaties om creativiteit op elke leeftijd te inspireren"],
+    ["Our Services", "Onze diensten"],
+    ["Weekly Art Lessons", "Wekelijkse kunstlessen"],
+    ["Holiday Camps", "Vakantiekampen"],
+    ["Group Events", "Groepsevenementen"],
+    ["I am a visual artist skilled in various media, such as watercolor, acrylic, oil pastels, and graphite. I also work as an art teacher (self-employed) and freelancer, creating commissioned and finished artwork.", "Ik ben een beeldend kunstenaar met ervaring in verschillende technieken, zoals aquarel, acryl, oliepastel en grafiet. Daarnaast werk ik als zelfstandig kunstdocent en freelancer en maak ik opdrachtwerk en afgewerkte kunstwerken."],
+    ["Inspiring creativity across Utrecht and surrounding areas", "Creativiteit inspireren in Utrecht en omgeving"],
+    ["Handmade Paintings", "Handgemaakte schilderijen"],
+    ["Seasonal Greeting Cards", "Seizoenswenskaarten"],
+    ["Customized Handicrafts", "Handwerk op maat"],
+    ["Contact & Lesson Enquiry", "Contact & lesaanvraag"],
+    ["Children's Lessons", "Kinderlessen"],
+    ["Adult Lessons", "Lessen voor volwassenen"],
+    ["Other", "Anders"],
+    ["Please select at least one lesson type.", "Selecteer minstens één lessoort."],
+    ["Holiday Camp", "Vakantiekamp"],
+    ["Group Event", "Groepsevenement"],
+    ["Name of Parent", "Naam ouder"],
+    ["Name of Child", "Naam kind"],
+    ["Age of Child", "Leeftijd kind"],
+    ["No days selected", "Geen dagen geselecteerd"],
+    ["＋ Add Child", "＋ Kind toevoegen"],
+    ["+ Add Child", "+ Kind toevoegen"],
+    ["✕ Remove Second Child", "✕ Tweede kind verwijderen"],
+    ["Second Child's Details", "Gegevens tweede kind"],
+    ["Name of Second Child's Parent", "Naam ouder van tweede kind"],
+    ["Name of Second Child", "Naam tweede kind"],
+    ["Age of Second Child", "Leeftijd tweede kind"],
+    ["Name", "Naam"],
+    ["Level of Experience (Select an Option)", "Ervaringsniveau (kies een optie)"],
+    ["Beginner", "Beginner"],
+    ["Have some Experience", "Enige ervaring"],
+    ["Number of Students", "Aantal leerlingen"],
+    ["Youngest One's Age (Select an Age)", "Leeftijd jongste (kies een leeftijd)"],
+    ["Oldest One's Age (Select an Age)", "Leeftijd oudste (kies een leeftijd)"],
+    ["Select Location", "Kies locatie"],
+    ["Please describe your request", "Beschrijf uw aanvraag"],
+    ["Phone Number", "Telefoonnummer"],
+    ["Email Address", "E-mailadres"],
+    ["Second Child's Parent Contact", "Contactgegevens ouder van tweede kind"],
+    ["Phone Number (Second Child's Parent)", "Telefoonnummer (ouder van tweede kind)"],
+    ["Email Address (Second Child's Parent)", "E-mailadres (ouder van tweede kind)"],
+    ["Submit", "Verzenden"],
+    ["Please provide either a phone number or email.", "Geef een telefoonnummer of e-mailadres op."],
+    ["Please select a Level of Experience.", "Selecteer een ervaringsniveau."],
+    ["Enquiry sent successfully!", "Aanvraag succesvol verzonden!"],
+    ["Failed to send message.", "Verzenden mislukt."],
+    ["Mon", "Ma"], ["Tue", "Di"], ["Wed", "Wo"], ["Thu", "Do"],
+    ["Fri", "Vr"], ["Sat", "Za"], ["Sun", "Zo"]
+  ];
+
+  var en2nl = new Map(), nl2en = new Map();
+  pairs.forEach(function (p) { en2nl.set(p[0], p[1]); nl2en.set(p[1], p[0]); });
+
+  function tr(text, toNL) {
+    // "Selected: Mon, Tue" style summaries
+    var m = text.match(/^(Selected|Geselecteerd): (.+)$/);
+    if (m) {
+      var dm = toNL ? en2nl : nl2en;
+      var list = m[2].split(", ").map(function (d) { return dm.get(d) || d; }).join(", ");
+      return (toNL ? "Geselecteerd" : "Selected") + ": " + list;
+    }
+    var en = en2nl.has(text) ? text : (nl2en.has(text) ? nl2en.get(text) : null);
+    if (en === null) return text;
+    return toNL ? en2nl.get(en) : en;
+  }
+
+  var lang = "en";
+  var btn = document.getElementById("langBtn");
+  var observer = new MutationObserver(function () { applyLang(); });
+
+  function applyLang() {
+    observer.disconnect();
+    var toNL = lang === "nl";
+
+    var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+    var node;
+    while ((node = walker.nextNode())) {
+      var p = node.parentNode;
+      if (!p || p.tagName === "SCRIPT" || p.tagName === "STYLE") continue;
+      var raw = node.nodeValue;
+      var trimmed = raw.trim();
+      if (!trimmed) continue;
+      var out = tr(trimmed, toNL);
+      if (out !== trimmed) node.nodeValue = raw.replace(trimmed, function () { return out; });
+    }
+
+    document.querySelectorAll("[placeholder]").forEach(function (el) {
+      el.setAttribute("placeholder", tr(el.getAttribute("placeholder"), toNL));
+    });
+
+    document.documentElement.lang = toNL ? "nl" : "en";
+    btn.textContent = toNL ? "EN" : "NL";
+
+    observer.observe(document.body, { childList: true, characterData: true, subtree: true });
+  }
+
+  // Lock option values to English so the form logic and emails keep working
+  document.querySelectorAll("option:not([value])").forEach(function (o) {
+    o.setAttribute("value", o.textContent.trim());
+  });
+
+  try { if (localStorage.getItem("cdLang") === "nl") lang = "nl"; } catch (e) {}
+
+  btn.addEventListener("click", function () {
+    lang = lang === "en" ? "nl" : "en";
+    try { localStorage.setItem("cdLang", lang); } catch (e) {}
+    applyLang();
+  });
+
+  applyLang();
+})();
+</script>
+</body></html>
