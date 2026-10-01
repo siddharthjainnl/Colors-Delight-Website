@@ -12,6 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Rozha+One&display=swap" rel="stylesheet">
 
   <style>
+    
     html { scroll-behavior: smooth; }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Rozha One', sans-serif; }
     body { scroll-behavior: smooth; color: #333; }
@@ -150,6 +151,18 @@
       .nav-left, .nav-right { gap: 8px; }
     }
     .lang-btn:hover { background: #6477b3; }
+        /* === LOADING SPINNER === */
+    .spinner {
+      display: none;
+      width: 44px; height: 44px;
+      margin: 0 auto;
+      border: 5px solid rgba(17,24,39,0.15);
+      border-top-color: #1e40af;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    .spinner.active { display: block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
     </head>
 <body>
@@ -371,7 +384,8 @@
       <input type="email" name="email_2" placeholder="Email Address (Second Child's Parent)">
     </div>
 
-    <button type="submit">Submit</button>
+     <button type="submit" id="submitBtn">Submit</button>
+    <div id="spinner" class="spinner" role="status" aria-label="Sending"></div>
     <div id="status" class="success"></div>
     <input type="hidden" name="selected_services" id="selected_services">
   </form>
@@ -584,9 +598,24 @@ if (otherToggle.checked) {
   templateParams.other_block = `<strong>Number of Students:</strong> ${getValue("other_students")}<br><strong>Age Range:</strong> ${getValue("other_age_min")} – ${getValue("other_age_max")}<br><strong>Location:</strong> ${getValue("other_location")}<br><strong>Description:</strong> ${getValue("other_description")}`;
 }
 
+const submitBtn = document.getElementById("submitBtn");
+const spinner   = document.getElementById("spinner");
+
+// Swap button for spinner
+submitBtn.style.display = "none";
+spinner.classList.add("active");
+status.textContent = "";
+
 emailjs.send("service_o965bw3", "template_q7w1j96", templateParams)
-  .then(() => status.textContent = "Enquiry sent successfully!")
-  .catch(() => status.textContent = "Failed to send message.");
+  .then(() => {
+    spinner.classList.remove("active");
+    status.textContent = "Enquiry sent successfully!";
+  })
+  .catch(() => {
+    spinner.classList.remove("active");
+    submitBtn.style.display = "";
+    status.textContent = "Failed to send message.";
+  });
   });
 });
 </script>
